@@ -1,0 +1,1 @@
+A collection of tools and templates to aid in auto-generating DOCX files using [pandoc](https://pandoc.org). See [this article](https://rnwest.engineer/auto-generate-docx-with-pandoc/) for more information on how to use these tools.
