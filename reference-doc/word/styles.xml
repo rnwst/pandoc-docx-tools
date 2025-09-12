@@ -5,10 +5,10 @@
   <w:docDefaults>
     <w:rPrDefault>
       <w:rPr>
-        <w:rFonts w:asciiTheme="minorHAnsi" w:eastAsiaTheme="minorHAnsi" w:hAnsiTheme="minorHAnsi" w:cstheme="minorBidi" />
+        <w:rFonts w:asciiTheme="minorHAnsi" w:eastAsiaTheme="minorEastAsia" w:hAnsiTheme="minorHAnsi" w:cstheme="minorBidi" />
         <w:sz w:val="24" />
         <w:szCs w:val="24" />
-        <w:lang w:val="en-US" w:eastAsia="en-US" w:bidi="ar-SA" />
+        <w:lang w:val="en-US" w:eastAsia="zh-CN" w:bidi="ar-SA" />
       </w:rPr>
     </w:rPrDefault>
     <w:pPrDefault>
@@ -527,13 +527,6 @@
       </w:tblCellMar>
     </w:tblPr>
     <w:tblStylePr w:type="firstRow">
-      <w:tblPr>
-        <w:jc w:val="left" />
-        <w:tblInd w:w="0" w:type="dxa" />
-      </w:tblPr>
-      <w:trPr>
-        <w:jc w:val="left" />
-      </w:trPr>
       <w:tcPr>
         <w:tcBorders>
           <w:bottom w:val="single" />

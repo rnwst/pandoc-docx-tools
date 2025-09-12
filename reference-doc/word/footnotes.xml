@@ -35,10 +35,15 @@
         <w:footnoteRef />
       </w:r>
       <w:r>
-        <w:t xml:space="preserve"> </w:t>
+        <w:t>Footnote Text.</w:t>
       </w:r>
+    </w:p>
+    <w:p>
+      <w:pPr>
+        <w:pStyle w:val="FootnoteBlockText" />
+      </w:pPr>
       <w:r>
-        <w:t xml:space="preserve">Footnote Text.</w:t>
+        <w:t>Footnote Block Text</w:t>
       </w:r>
     </w:p>
   </w:footnote>
