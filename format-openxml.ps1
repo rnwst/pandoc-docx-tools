@@ -86,7 +86,7 @@ Get-ChildItem -Force -LiteralPath $Path  -File -Recurse | Where-Object { $_.Name
     Write-Host "Formatting $($_.FullName)"
 
     # Read XML.
-    $xml = [xml](Get-Content -LiteralPath $_.FullName)
+    $xml = [xml](Get-Content -LiteralPath $_.FullName -Encoding utf8)
 
     # Remove superfluous attributes.
     Remove-Attributes -node $xml.DocumentElement
@@ -122,5 +122,7 @@ Get-ChildItem -Force -LiteralPath $Path  -File -Recurse | Where-Object { $_.Name
     $xmlString = $xmlString -replace '(?m)^  (xmlns(?::\w+)?="[^"]*") (mc:Ignorable="[^"]*")', "  `$1`r`n  `$2"
 
     # Write formatted XML back to file.
-    Set-Content -LiteralPath $_.FullName $xmlString
+    # Why not Set-Content -LiteralPath $_.FullName -Encoding utf8 $xmlString?
+    # Because it adds a BOM to the file.
+    $null = New-Item -Force $_.FullName -Value ($xmlString + "`r`n")    
 }
