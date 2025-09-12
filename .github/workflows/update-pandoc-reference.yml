@@ -19,22 +19,11 @@ jobs:
     
     - name: Install latest Pandoc using winget
       run: |
-        winget install --source winget --exact --id JohnMacFarlane.Pandoc --accept-package-agreements --accept-source-agreements
-    
-    # - name: Add Pandoc to PATH
-    #   run: |
-    #     $pandocPath = "$env:LOCALAPPDATA\Microsoft\WinGet\Packages\JohnMacFarlane.Pandoc_*"
-    #     $pandocDir = Get-ChildItem -Path $pandocPath -Directory | Select-Object -First 1
-    #     if ($pandocDir) {
-    #       $pandocExe = Join-Path $pandocDir.FullName "tools\pandoc.exe"
-    #       if (Test-Path $pandocExe) {
-    #         echo "$($pandocDir.FullName)\tools" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
-    #       }
-    #     }
+        winget install --scope machine --accept-package-agreements --accept-source-agreements --source winget --exact --id JohnMacFarlane.Pandoc
     
     - name: Generate reference document
       run: |
-        pandoc -o reference-doc.docx --print-default-data-file reference.docx
+        & "C:\Program Files\Pandoc\pandoc.exe" -o reference-doc.docx --print-default-data-file reference.docx
     
     - name: Apply reference document edits
       run: |
@@ -47,8 +36,6 @@ jobs:
         $changes = git diff --cached --name-only
         if ($changes) {
           echo "changes=true" >> $env:GITHUB_OUTPUT
-          echo "Changed files:" >> $env:GITHUB_OUTPUT
-          echo $changes >> $env:GITHUB_OUTPUT
         } else {
           echo "changes=false" >> $env:GITHUB_OUTPUT
         }
@@ -58,10 +45,7 @@ jobs:
       run: |
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
-        git commit -m "Update pandoc reference document
-        
-        Auto-generated from latest pandoc version
-        Changed files: ${{ steps.check-changes.outputs.changes }}"
+        git commit -m "[CI] Update pandoc reference document"
     
     - name: Push changes
       if: steps.check-changes.outputs.changes == 'true'
