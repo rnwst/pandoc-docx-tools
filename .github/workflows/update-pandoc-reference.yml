@@ -1,0 +1,53 @@
+name: Update Pandoc Reference Document
+
+on:
+  schedule:
+    # Runs daily at 00:00 UTC
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+
+jobs:
+  update-reference:
+    runs-on: windows-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        fetch-depth: 0
+    
+    - name: Install latest Pandoc using winget
+      run: |
+        winget install --scope machine --accept-package-agreements --accept-source-agreements --source winget --exact --id JohnMacFarlane.Pandoc
+    
+    - name: Generate reference document
+      run: |
+        & "C:\Program Files\Pandoc\pandoc.exe" -o reference-doc.docx --print-default-data-file reference.docx
+    
+    - name: Apply reference document edits
+      run: |
+        .\apply-reference-doc-edits.ps1
+    
+    - name: Check for changes in reference-doc folder
+      id: check-changes
+      run: |
+        git add reference-doc/
+        $changes = git diff --cached --name-only
+        if ($changes) {
+          echo "changes=true" >> $env:GITHUB_OUTPUT
+        } else {
+          echo "changes=false" >> $env:GITHUB_OUTPUT
+        }
+    
+    - name: Commit changes
+      if: steps.check-changes.outputs.changes == 'true'
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git commit -m "[CI] Update pandoc reference document"
+    
+    - name: Push changes
+      if: steps.check-changes.outputs.changes == 'true'
+      run: |
+        git push
