@@ -19,13 +19,12 @@ if ! [ -f "${MDFILE}" ]; then
     exit 1
 fi
 
-filename=$(basename -- "${MDFILE}")
-extension="${filename##*.}"
-filename="${filename%.*}"
-echo "${filename} | ${extension}"
+FILENAME=$(basename -- "${MDFILE}")
+EXTENSION="${FILENAME##*.}"
+FILENAME="${FILENAME%.*}"
 
 # Check if the file extension is `.md`.
-if ! [ "${extension}" == "md" ]; then
+if ! [ "${EXTENSION}" == "md" ]; then
     echo "Error: File '${MDFILE}' is not a Markdown file."
     exit 1
 fi
@@ -35,8 +34,8 @@ if ! [ -f "reference-doc.docx" ]; then
     exit 1
 fi
 
-docxFile="${filename}.docx"
-resourcePath=$(dirname -- "${MDFILE}")
+DOCXFILE="${FILENAME}.docx"
+RESOURCEPATH=$(dirname -- "${MDFILE}")
 
 pandoc \
     --reference-doc=reference-doc.docx \
@@ -45,5 +44,7 @@ pandoc \
     --citeproc \
     --metadata=link-citations:true \
     -t docx+native_numbering \
-    --resource-path=${resourcePath} \
-    ${MDFILE} -o ${docxFile}
+    --resource-path=${RESOURCEPATH} \
+    ${MDFILE} -o ${DOCXFILE}
+
+echo "Successfully created ${DOCXFILE} from ${MDFILE}"
